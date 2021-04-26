@@ -56,7 +56,8 @@ const microAuthGoogle = ({
 
     if (url.pathname === path) {
       try {
-        const state = uuid.v4();
+        const stateDefault = (args||[])[0]?.state;
+        const state = stateDefault || uuid.v4();
 
         states.push(state);
 
@@ -105,11 +106,12 @@ const microAuthGoogle = ({
 
         const result = {
           provider,
+          state,
           info: data,
           client
         };
 
-        args.push({ result });
+        args[0] = {result};
 
         return fn(req, res, ...args);
       } catch (err) {
