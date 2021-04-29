@@ -49,7 +49,7 @@ const microAuthGoogle = ({
     try {
       url = new URL(`${protocol}//${host}${req.url}`);
     } catch (err) {
-      args.push({ err, provider });
+      args[0] = { err, provider };
 
       return fn(req, res, ...args);
     }
@@ -70,7 +70,7 @@ const microAuthGoogle = ({
 
         return redirect(res, redirectUrl);
       } catch (err) {
-        args.push({ err, provider });
+        args[0] = { err, provider };
 
         return fn(req, res, ...args);
       }
@@ -83,7 +83,7 @@ const microAuthGoogle = ({
         if (!states.includes(state)) {
           const err = new Error("Invalid state");
 
-          args.push({ err, provider });
+          args[0] = { err, provider };
 
           return fn(req, res, ...args);
         }
@@ -93,7 +93,7 @@ const microAuthGoogle = ({
         const { tokens, error } = await client.getToken(code);
 
         if (error) {
-          args.push({ err: error, provider });
+          args[0] = { err: error, provider };
 
           return fn(req, res, ...args);
         }
@@ -115,7 +115,7 @@ const microAuthGoogle = ({
 
         return fn(req, res, ...args);
       } catch (err) {
-        args.push({ err, provider });
+        args[0] = { err, provider };
 
         return fn(req, res, ...args);
       }
